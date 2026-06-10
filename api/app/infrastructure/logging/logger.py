@@ -2,7 +2,6 @@ import logging
 import sys
 from core.config import get_settings
 
-
 def setup_logging():
     """配置 MiniManus 项目的日志系统，涵盖日志等级、输出格式、输出渠道等"""
     # 获取项目配置
