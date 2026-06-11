@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.infrastructure.logging.logger import setup_logging
+from app.infrastructure.storage.postgres import get_postgres
 from app.infrastructure.storage.redis import get_redis
 from app.interfaces.endpoints.routes import router
 from app.interfaces.errors.exception_handlers import register_exception_handlers
@@ -35,12 +36,14 @@ async def lifespan(app: FastAPI):
 
     # 初始化 Redis / Postgres / Cos 客户端
     await get_redis().init()
+    await get_postgres().init()
 
     try:
         yield
     finally:
         # 关闭 Redis / Postgres / Cos 客户端
         await get_redis().shutdown()
+        await get_postgres().shutdown()
 
         logger.info("MiniManus 正在关闭")
 

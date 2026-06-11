@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     app_config_filepath: str = "config.yaml"
 
     # 数据库配置
-    sqlalchemy_database_uri: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/manus"
+    sqlalchemy_database_uri: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/minimanus"
 
     # Redis 配置
     redis_host: str = "localhost"
@@ -59,5 +59,9 @@ def get_settings() -> Settings:
 
 
 if __name__ == "__main__":
-    settings = get_settings()
+    from pathlib import Path
+
+    env_file = Path(__file__).resolve().parent.parent / ".env.dev"
+    print(env_file)
+    settings = Settings(_env_file=env_file)
     print(settings)
