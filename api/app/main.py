@@ -1,8 +1,11 @@
 import logging
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.infrastructure.logging.logger import setup_logging
+from app.infrastructure.storage.redis import get_redis
 from app.interfaces.endpoints.routes import router
 from app.interfaces.errors.exception_handlers import register_exception_handlers
 from core.config import get_settings
@@ -22,6 +25,7 @@ openapi_tags = [
     }
 ]
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """创建 FastAPI 应用生命周期上下文管理器"""
@@ -29,10 +33,17 @@ async def lifespan(app: FastAPI):
     setup_logging()
     logger.info("MiniManus 正在初始化")
 
+    # 初始化 Redis / Postgres / Cos 客户端
+    await get_redis().init()
+
     try:
         yield
     finally:
+        # 关闭 Redis / Postgres / Cos 客户端
+        await get_redis().shutdown()
+
         logger.info("MiniManus 正在关闭")
+
 
 # 创建 MiniManus 应用实例
 app = FastAPI(

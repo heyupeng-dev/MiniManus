@@ -1,6 +1,8 @@
 from functools import lru_cache
 from typing import Optional
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 
 class Settings(BaseSettings):
     """MiniManus 后端中控配置信息，从 .env 或者环境变量中加载数据"""
@@ -38,18 +40,23 @@ class Settings(BaseSettings):
     sandbox_http_proxy: Optional[str] = None
     sandbox_no_proxy: Optional[str] = None
 
-    # 使用 pydantic v2 的写法来完成环境变量信息的告知
+    # 加载外部配置
     model_config = SettingsConfigDict(
-        env_file=".env",
+        # 开发环境配置文件；相对路径会从当前运行目录开始查找
+        env_file=".env.dev",
+        # 按 UTF-8 读取配置文件，避免中文注释或特殊字符出现编码问题
         env_file_encoding="utf-8",
+        # 配置文件中如果出现 Settings 没有声明的配置项，直接忽略，不抛异常
         extra="ignore",
     )
+
 
 @lru_cache()
 def get_settings() -> Settings:
     """获取当前 MiniManus 项目的配置信息，并对内容进行缓存，避免重复读取"""
     settings = Settings()
     return settings
+
 
 if __name__ == "__main__":
     settings = get_settings()
