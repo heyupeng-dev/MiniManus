@@ -50,7 +50,7 @@ class Cos:
 
     @property
     def client(self) -> CosS3Client:
-        """只读属性，返回腾讯云Cos对象存储客户端"""
+        """只读属性，返回腾讯云 Cos 对象存储客户端"""
         if self._client is None:
             raise RuntimeError("腾讯云 Cos 对象存储未初始化，请调用 init() 完成初始化")
         return self._client
