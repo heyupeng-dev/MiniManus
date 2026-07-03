@@ -34,6 +34,9 @@ env/
 .env.local
 .env.*.local
 
+# Runtime configuration (auto-generated, contains API keys)
+config.yaml
+
 # Jupyter
 .ipynb_checkpoints/
 
