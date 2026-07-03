@@ -1,4 +1,4 @@
-from typing import Protocol, Optional
+from typing import Protocol
 
 from app.domain.models.app_config import AppConfig
 
@@ -6,7 +6,7 @@ from app.domain.models.app_config import AppConfig
 class AppConfigRepository(Protocol):
     """应用配置仓库"""
 
-    def load(self) -> Optional[AppConfig]:
+    def load(self) -> AppConfig | None:
         """加载获取应用配置"""
         ...
 

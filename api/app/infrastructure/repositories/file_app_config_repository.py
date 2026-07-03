@@ -13,16 +13,17 @@ logger = logging.getLogger(__name__)
 
 
 class FileAppConfigRepository(AppConfigRepository):
-    """基于本地文件的App配置数据仓库"""
+    """基于本地文件的 App 配置数据仓库"""
 
     def __init__(self, config_path: str) -> None:
         """构造函数，完成文件配置仓库的相关信息初始化"""
-        # 获取当前项目的根目录
+        # 获取当前工作目录
         root_dir = Path.cwd()
-
-        # 拼接配置文件路径并校验基础信息
+        # 拼接配置文件路径
         self._config_path = root_dir.joinpath(root_dir, config_path)
+        # 自动创建父目录（如果不存在）
         self._config_path.parent.mkdir(parents=True, exist_ok=True)
+        # 设置配置文件的锁文件路径
         self._lock_file = self._config_path.with_suffix(".lock")
 
     def _create_default_app_config_if_not_exists(self):
